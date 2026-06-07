@@ -130,6 +130,26 @@
 
                     </div>
                 </div>
+
+                <!-- Комментарии к разделу Книга Жизни -->
+                <div class="section-comments fade-in" data-section="bio">
+                    <button class="toggle-comments-btn" onclick="toggleSectionComments('bio')">
+                        <span>💬 Воспоминания о Книге Жизни</span>
+                        <span class="comments-count" id="count-bio">(0)</span>
+                    </button>
+                    <div class="comments-pane" id="pane-bio" style="display: none;">
+                        <div class="section-comments-list" id="list-bio">
+                            <!-- Комментарии загружаются через JS -->
+                        </div>
+                        <form class="section-comment-form" onsubmit="submitSectionComment(event, 'bio')">
+                            <div class="form-row">
+                                <input type="text" placeholder="Ваше имя" required class="comment-name-input">
+                                <button type="submit" class="btn-comment-submit">Отправить</button>
+                            </div>
+                            <textarea placeholder="Ваши слова к этому разделу..." required rows="2" class="comment-text-input"></textarea>
+                        </form>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -141,16 +161,62 @@
             <div class="container relative-z">
                 <span class="section-tag fade-in">Честь и Доблесть</span>
                 <h2 class="section-title fade-in">Военный путь и награды</h2>
-                <div class="awards-grid">
-                    <div class="award-card fade-in">
-                        <img src="img/boevye_tovarishi_1.jpg" alt="Сирийская кампания">
-                        <h3>Сирийская кампания</h3>
-                        <p>В 2020 году Юрий принимал участие в военной операции в Сирийской Арабской Республике. За успешное выполнение специальных задач был награжден Медалью участника военной операции в Сирии.</p>
+                <div class="awards-tab-container fade-in">
+                    <!-- Список вкладок (слева на ПК, сверху на смартфонах) -->
+                    <div class="awards-tabs">
+                        <button class="award-tab active" onclick="showAward(0)">
+                            <span class="award-tab-title">Орден Мужества (I)</span>
+                            <span class="award-tab-date">30.11.2023</span>
+                        </button>
+                        <button class="award-tab" onclick="showAward(1)">
+                            <span class="award-tab-title">Орден Мужества (II, Посмертно)</span>
+                            <span class="award-tab-date">2026 г.</span>
+                        </button>
+                        <button class="award-tab" onclick="showAward(2)">
+                            <span class="award-tab-title">Медаль «За отвагу»</span>
+                            <span class="award-tab-date">30.05.2024</span>
+                        </button>
+                        <button class="award-tab" onclick="showAward(3)">
+                            <span class="award-tab-title">Медаль Суворова</span>
+                            <span class="award-tab-date">11.10.2022</span>
+                        </button>
+                        <button class="award-tab" onclick="showAward(4)">
+                            <span class="award-tab-title">Медаль «За боевые отличия»</span>
+                            <span class="award-tab-date">24.04.2018</span>
+                        </button>
+                        <button class="award-tab" onclick="showAward(5)">
+                            <span class="award-tab-title">Служба в Сирии</span>
+                            <span class="award-tab-date">2020 г.</span>
+                        </button>
+                        <button class="award-tab" onclick="showAward(6)">
+                            <span class="award-tab-title">Знак «Гвардия»</span>
+                            <span class="award-tab-date">Почетный знак</span>
+                        </button>
                     </div>
-                    <div class="award-card fade-in">
-                        <img src="img/boevye_tovarishi_2.jpg" alt="Доблесть и храбрость">
-                        <h3>Доблесть и храбрость</h3>
-                        <p>Юрий проявил невероятную отвагу во время СВО. Он неоднократно участвовал в сложнейших штурмовых операциях. За личное мужество награжден орденами и медалями.</p>
+
+                    <!-- Панель деталей активной награды -->
+                    <div class="award-details-panel">
+                        <!-- Заполняется динамически через JS -->
+                    </div>
+                </div>
+
+                <!-- Комментарии к разделу Награды -->
+                <div class="section-comments fade-in" data-section="awards">
+                    <button class="toggle-comments-btn" onclick="toggleSectionComments('awards')">
+                        <span>💬 Отзывы о Наградах</span>
+                        <span class="comments-count" id="count-awards">(0)</span>
+                    </button>
+                    <div class="comments-pane" id="pane-awards" style="display: none;">
+                        <div class="section-comments-list" id="list-awards">
+                            <!-- Комментарии загружаются через JS -->
+                        </div>
+                        <form class="section-comment-form" onsubmit="submitSectionComment(event, 'awards')">
+                            <div class="form-row">
+                                <input type="text" placeholder="Ваше имя" required class="comment-name-input">
+                                <button type="submit" class="btn-comment-submit">Отправить</button>
+                            </div>
+                            <textarea placeholder="Ваши слова к этому разделу..." required rows="2" class="comment-text-input"></textarea>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -220,6 +286,26 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Комментарии к разделу Хронология -->
+                <div class="section-comments fade-in" data-section="stories">
+                    <button class="toggle-comments-btn" onclick="toggleSectionComments('stories')">
+                        <span>💬 Воспоминания о Хронологии событий</span>
+                        <span class="comments-count" id="count-stories">(0)</span>
+                    </button>
+                    <div class="comments-pane" id="pane-stories" style="display: none;">
+                        <div class="section-comments-list" id="list-stories">
+                            <!-- Комментарии загружаются через JS -->
+                        </div>
+                        <form class="section-comment-form" onsubmit="submitSectionComment(event, 'stories')">
+                            <div class="form-row">
+                                <input type="text" placeholder="Ваше имя" required class="comment-name-input">
+                                <button type="submit" class="btn-comment-submit">Отправить</button>
+                            </div>
+                            <textarea placeholder="Ваши слова к этому разделу..." required rows="2" class="comment-text-input"></textarea>
+                        </form>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -284,6 +370,26 @@
                     <div class="polaroid fade-in" onclick="openLightbox(this)">
                         <img src="img/boevye_tovarishi_2.jpg" alt="Фронтовое братство">
                         <p>Фронтовое братство на СВО</p>
+                    </div>
+                </div>
+
+                <!-- Комментарии к разделу Архив -->
+                <div class="section-comments fade-in" data-section="gallery">
+                    <button class="toggle-comments-btn" onclick="toggleSectionComments('gallery')">
+                        <span>💬 Отзывы об Архиве</span>
+                        <span class="comments-count" id="count-gallery">(0)</span>
+                    </button>
+                    <div class="comments-pane" id="pane-gallery" style="display: none;">
+                        <div class="section-comments-list" id="list-gallery">
+                            <!-- Комментарии загружаются через JS -->
+                        </div>
+                        <form class="section-comment-form" onsubmit="submitSectionComment(event, 'gallery')">
+                            <div class="form-row">
+                                <input type="text" placeholder="Ваше имя" required class="comment-name-input">
+                                <button type="submit" class="btn-comment-submit">Отправить</button>
+                            </div>
+                            <textarea placeholder="Ваши слова к этому разделу..." required rows="2" class="comment-text-input"></textarea>
+                        </form>
                     </div>
                 </div>
             </div>

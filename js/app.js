@@ -115,7 +115,12 @@ document.addEventListener("DOMContentLoaded", () => {
     updateBookState();
     
     // Загрузка воспоминаний
-    loadMemories();
+    loadAllComments();
+
+    // Инициализация первой награды во вкладках
+    if (typeof showAward === 'function') {
+        showAward(0);
+    }
 
     // Set up audio end handler to toggle icons back to play mode
     const audio = document.getElementById('site-audio');
@@ -136,11 +141,18 @@ function openLightbox(element) {
     const imgSrc = element.tagName === 'IMG' ? element.src : element.querySelector('img').src;
     let capText = '';
     
-    // Check if it's a polaroid with a paragraph caption
-    if(element.tagName !== 'IMG') {
+    // Check if it's a polaroid with a paragraph caption or an award with an img-label
+    if (element.tagName !== 'IMG') {
         const p = element.querySelector('p');
         if (p && !p.classList.contains('instruction')) {
             capText = p.textContent;
+        } else {
+            const label = element.querySelector('.img-label');
+            if (label) {
+                const activeTab = document.querySelector('.award-tab.active .award-tab-title');
+                const awardTitle = activeTab ? activeTab.textContent : '';
+                capText = awardTitle ? `${awardTitle} — ${label.textContent}` : label.textContent;
+            }
         }
     }
 
@@ -157,55 +169,117 @@ function closeLightbox() {
     document.getElementById('lightbox').classList.remove('active');
 }
 
-// Вспомогательные функции для локального хранилища (localStorage fallback)
-function getLocalMemories() {
+// Вспомогательные функции для локального хранилища (localStorage fallback) по разделам
+function getLocalSectionComments(sectionId) {
     try {
-        const stored = localStorage.getItem('avito_memories');
+        const key = sectionId === 'general' ? 'avito_memories' : `avito_memories_${sectionId}`;
+        const stored = localStorage.getItem(key);
         return stored ? JSON.parse(stored) : [];
     } catch (e) {
-        console.error("Ошибка чтения localStorage:", e);
+        console.error(`Ошибка чтения localStorage для ${sectionId}:`, e);
         return [];
     }
 }
 
-function saveLocalMemory(name, message) {
+function saveLocalSectionComment(sectionId, name, message) {
     try {
-        const memories = getLocalMemories();
-        memories.unshift({ name, message, created_at: new Date().toISOString() });
-        localStorage.setItem('avito_memories', JSON.stringify(memories));
+        const key = sectionId === 'general' ? 'avito_memories' : `avito_memories_${sectionId}`;
+        const comments = getLocalSectionComments(sectionId);
+        comments.unshift({
+            name,
+            message,
+            section_id: sectionId,
+            created_at: new Date().toISOString()
+        });
+        localStorage.setItem(key, JSON.stringify(comments));
     } catch (e) {
-        console.error("Ошибка записи в localStorage:", e);
+        console.error(`Ошибка записи в localStorage для ${sectionId}:`, e);
     }
 }
 
-function addMemoryToDOM(name, message, animate = false) {
-    const list = document.getElementById('memory-list');
-    if (!list) return;
+// Слияние комментариев из БД и локального хранилища без дубликатов
+function mergeComments(dbList, localList) {
+    const seen = new Set();
+    const result = [];
     
-    const entry = document.createElement('div');
-    entry.className = 'memory-card';
-    if (animate) {
-        entry.classList.add('fade-in');
+    // Сначала добавляем из БД (они приоритетнее)
+    dbList.forEach(c => {
+        const key = `${c.name}_${c.message}`;
+        if (!seen.has(key)) {
+            seen.add(key);
+            result.push(c);
+        }
+    });
+    
+    // Добавляем локальные, если их нет в БД
+    localList.forEach(c => {
+        const key = `${c.name}_${c.message}`;
+        if (!seen.has(key)) {
+            seen.add(key);
+            result.push(c);
+        }
+    });
+    
+    // Сортируем по дате создания в обратном порядке
+    result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    return result;
+}
+
+// Вывод комментариев на страницу
+function renderComments(sectionId, comments) {
+    if (sectionId === 'general') {
+        const list = document.getElementById('memory-list');
+        if (!list) return;
+        
+        list.innerHTML = '';
+        
+        // Рендерим загруженные комментарии
+        comments.forEach(c => {
+            const card = document.createElement('div');
+            card.className = 'memory-card visible';
+            card.innerHTML = `<p class="memory-text">«${c.message}»</p><p class="memory-author">— ${c.name}</p>`;
+            list.appendChild(card);
+        });
+        
+        // Статические моки воспоминаний (остаются внизу гостевой книги)
+        const mock1 = document.createElement('div');
+        mock1.className = 'memory-card visible';
+        mock1.innerHTML = `<p class="memory-text">«Юрген обладал нереальной смелостью, терпеливостью и храбростью. Он неоднократно штурмовал опорные пункты врага, никогда не хвастался и не восхвалял себя, вел себя сдержанно и скромно. До сих пор не могу поверить, что его нет...»</p><p class="memory-author">— Сослуживец и друг</p>`;
+        list.appendChild(mock1);
+
+        const mock2 = document.createElement('div');
+        mock2.className = 'memory-card visible';
+        mock2.innerHTML = `<p class="memory-text">«Юра всегда красиво ухаживал: цветы, подарки, никогда не давал носить тяжелые пакеты. Он говорил, что женщины не созданы для тяжестей. Наш сын Тёмка будет расти и гордиться своим отцом-героем, который пошел защищать нашу Родину.»</p><p class="memory-author">— Супруга Ксения</p>`;
+        list.appendChild(mock2);
     } else {
-        entry.classList.add('visible');
-    }
-    
-    entry.innerHTML = `<p class="memory-text">«${message}»</p><p class="memory-author">— ${name}</p>`;
-    
-    // Добавляем в начало списка воспоминаний (над стандартными)
-    list.insertBefore(entry, list.firstChild);
-    
-    if (animate) {
-        setTimeout(() => {
-            entry.classList.add('visible');
-        }, 50);
+        const listEl = document.getElementById(`list-${sectionId}`);
+        const countEl = document.getElementById(`count-${sectionId}`);
+        if (!listEl) return;
+        
+        if (countEl) {
+            countEl.textContent = `(${comments.length})`;
+        }
+        
+        listEl.innerHTML = '';
+        if (comments.length === 0) {
+            listEl.innerHTML = `<p style="text-align: center; color: var(--text-light-muted); font-size: 0.9rem; padding: 15px 0; margin: 0; width: 100%;">Пока нет воспоминаний в этом разделе. Будьте первыми!</p>`;
+        } else {
+            comments.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'section-comment-card';
+                card.innerHTML = `
+                    <p class="section-comment-text">«${c.message}»</p>
+                    <p class="section-comment-author">— ${c.name}</p>
+                `;
+                listEl.appendChild(card);
+            });
+        }
     }
 }
 
-// Загрузка воспоминаний из Supabase или localStorage
-async function loadMemories() {
-    let memories = [];
-    
+// Загрузка всех комментариев
+async function loadAllComments() {
+    let dbComments = [];
     if (supabaseClient) {
         try {
             // pyrefly: ignore [missing-attribute]
@@ -213,25 +287,57 @@ async function loadMemories() {
                 .from('memories')
                 .select('*')
                 .order('created_at', { ascending: false });
-                
-            if (error) throw error;
-            memories = data || [];
+            if (!error && data) {
+                dbComments = data;
+            } else if (error) {
+                console.error("Ошибка Supabase при загрузке комментариев:", error);
+            }
         } catch (err) {
-            console.error("Не удалось загрузить воспоминания из Supabase, используем localStorage:", err);
-            memories = getLocalMemories();
+            console.error("Исключение при загрузке комментариев из Supabase:", err);
         }
-    } else {
-        memories = getLocalMemories();
     }
-    
-    // Выводим воспоминания на экран в хронологическом порядке (чтобы новые были сверху при вставке)
-    // Так как insertBefore вставляет элемент в самое начало, мы обходим массив с конца к началу (от старых к новым)
-    for (let i = memories.length - 1; i >= 0; i--) {
-        addMemoryToDOM(memories[i].name, memories[i].message, false);
+
+    const sections = ['bio', 'awards', 'stories', 'gallery', 'general'];
+    sections.forEach(sectionId => {
+        const localComments = getLocalSectionComments(sectionId);
+        const sectionDbComments = dbComments.filter(c => {
+            const sId = c.section_id || 'general';
+            return sId === sectionId;
+        });
+
+        const merged = mergeComments(sectionDbComments, localComments);
+        renderComments(sectionId, merged);
+    });
+}
+
+// Вставка комментария в Supabase с автоматическим fallback при отсутствии колонки section_id
+async function insertCommentToSupabase(name, message, sectionId) {
+    if (!supabaseClient) return false;
+    try {
+        // Пробуем вставить с указанием раздела
+        // pyrefly: ignore [missing-attribute]
+        const { error } = await supabaseClient
+            .from('memories')
+            .insert([{ name, message, section_id: sectionId }]);
+            
+        if (!error) return true;
+        
+        // Если ошибка говорит об отсутствии колонки, пробуем вставить без неё
+        console.warn("Ошибка вставки с section_id, сохраняем как общее воспоминание в БД:", error);
+        // pyrefly: ignore [missing-attribute]
+        const { error: retryError } = await supabaseClient
+            .from('memories')
+            .insert([{ name, message }]);
+            
+        if (!retryError) return true;
+        throw retryError;
+    } catch (err) {
+        console.error("Не удалось сохранить в БД:", err);
+        return false;
     }
 }
 
-// Отправка воспоминания
+// Отправка воспоминания в общем разделе
 async function submitMemory(event) {
     event.preventDefault();
     const nameEl = document.getElementById('name');
@@ -240,31 +346,53 @@ async function submitMemory(event) {
     
     const name = nameEl.value.trim();
     const message = messageEl.value.trim();
-    
     if (!name || !message) return;
     
-    // Отображаем на клиенте моментально
-    addMemoryToDOM(name, message, true);
-    
-    // Очищаем форму
     nameEl.value = '';
     messageEl.value = '';
     
-    // Сохраняем в Supabase или в localStorage
-    if (supabaseClient) {
-        try {
-            const { error } = await supabaseClient
-                .from('memories')
-                // pyrefly: ignore [missing-attribute]
-                .insert([{ name, message }]);
-                
-            if (error) throw error;
-        } catch (err) {
-            console.error("Не удалось отправить в Supabase, сохраняем локально:", err);
-            saveLocalMemory(name, message);
-        }
+    // Локально сохраняем мгновенно для быстрой реакции интерфейса
+    saveLocalSectionComment('general', name, message);
+    await loadAllComments();
+    
+    // Синхронизируем с Supabase в фоне
+    await insertCommentToSupabase(name, message, 'general');
+    await loadAllComments();
+}
+
+// Отправка комментария к подразделу
+async function submitSectionComment(event, sectionId) {
+    event.preventDefault();
+    const form = event.target;
+    const nameEl = form.querySelector('.comment-name-input');
+    const messageEl = form.querySelector('.comment-text-input');
+    if (!nameEl || !messageEl) return;
+    
+    const name = nameEl.value.trim();
+    const message = messageEl.value.trim();
+    if (!name || !message) return;
+    
+    nameEl.value = '';
+    messageEl.value = '';
+    
+    // Локально сохраняем мгновенно
+    saveLocalSectionComment(sectionId, name, message);
+    await loadAllComments();
+    
+    // Синхронизируем с Supabase
+    await insertCommentToSupabase(name, message, sectionId);
+    await loadAllComments();
+}
+
+// Показ/скрытие панели комментариев
+function toggleSectionComments(sectionId) {
+    const pane = document.getElementById(`pane-${sectionId}`);
+    if (!pane) return;
+    
+    if (pane.style.display === 'none' || !pane.style.display) {
+        pane.style.display = 'block';
     } else {
-        saveLocalMemory(name, message);
+        pane.style.display = 'none';
     }
 }
 
@@ -285,4 +413,108 @@ function toggleAudio() {
         playIcon.style.display = 'block';
         pauseIcon.style.display = 'none';
     }
+}
+
+// Awards Tab Logic
+const AWARDS_DATA = [
+    {
+        title: "Орден Мужества (I)",
+        meta: "Указ Президента РФ от 30 ноября 2023 г. • Орден № 149784",
+        desc: "Юрий Юрьевич Бесчастнов был удостоен этой высокой государственной награды за мужество, отвагу и самоотверженность, проявленные при исполнении воинского долга в ходе сложнейших штурмовых действий на передовой.",
+        images: [
+            { src: "img/medal_courage.jpg", label: "Медаль" },
+            { src: "img/cert_courage_order.jpg", label: "Удостоверение" }
+        ]
+    },
+    {
+        title: "Орден Мужества (II, Посмертно)",
+        meta: "Указ Президента РФ (2026 г.) • Посмертно",
+        desc: "Награжден посмертно за героизм, проявленный при выполнении боевой задачи в районе проведения СВО 22 января 2026 года. Юрий шёл впереди своей группы БПЛА, защищая товарищей и выполнив свой долг перед Родиной до конца.",
+        images: [
+            { src: "img/medal_courage.jpg", label: "Медаль" }
+        ]
+    },
+    {
+        title: "Медаль «За отвагу»",
+        meta: "Указ Президента РФ от 30 мая 2024 г. • Медаль № 211270",
+        desc: "Государственная награда Российской Федерации, вручаемая за личное мужество и храбрость, проявленные в боях и при выполнении специальных задач по обеспечению государственной безопасности.",
+        images: [
+            { src: "img/cert_courage_medal.jpg", label: "Удостоверение" }
+        ]
+    },
+    {
+        title: "Медаль Суворова",
+        meta: "Указ Президента РФ от 11 октября 2022 г. • Награда № 67392",
+        desc: "Присуждается военнослужащим за личное мужество и отвагу, проявленные при защите Отечества и государственных интересов Российской Федерации в ходе боевых действий на суше.",
+        images: [
+            { src: "img/medal_suvorov.jpg", label: "Медаль" },
+            { src: "img/cert_suvorov.jpg", label: "Удостоверение" }
+        ]
+    },
+    {
+        title: "Медаль «За боевые отличия»",
+        meta: "Приказ Министра обороны РФ от 24 апреля 2018 г. • Награда № 19",
+        desc: "Ведомственная награда Министерства обороны РФ, которой награждаются военнослужащие Вооруженных Сил за отличие, отвагу и самоотверженность, проявленные при выполнении задач в боевых условиях.",
+        images: [
+            { src: "img/medal_combat_distinction.jpg", label: "Медаль" },
+            { src: "img/cert_combat_distinction.jpg", label: "Удостоверение" }
+        ]
+    },
+    {
+        title: "Медаль участника операции в Сирии",
+        meta: "Приказ Министра обороны РФ (2020 г.)",
+        desc: "Вручена Юрию Бесчастнову за успешное выполнение специальных задач в ходе военной операции Вооруженных Сил РФ в Сирийской Арабской Республике.",
+        images: [
+            { src: "img/medal_syria.jpg", label: "Медаль" },
+            { src: "img/boevye_tovarishi_1.jpg", label: "Фото службы" }
+        ]
+    },
+    {
+        title: "Нагрудный знак «Гвардия»",
+        meta: "Почетный знак отличия",
+        desc: "Нагрудный знак «Гвардия» вручается военнослужащим воинских частей, удостоенных почетного звания «гвардейских», за высокое воинское мастерство, доблесть и образцовую службу.",
+        images: [
+            { src: "img/medal_guard.jpg", label: "Знак «Гвардия»" }
+        ]
+    }
+];
+
+function showAward(index) {
+    const tabs = document.querySelectorAll('.award-tab');
+    tabs.forEach((tab, idx) => {
+        if (idx === index) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+
+    const panel = document.querySelector('.award-details-panel');
+    if (!panel) return;
+
+    const data = AWARDS_DATA[index];
+    
+    // Формируем HTML для изображений награды
+    let mediaHTML = '';
+    if (data.images && data.images.length > 0) {
+        mediaHTML = `
+            <div class="award-media">
+                ${data.images.map(img => `
+                    <div class="award-media-item" onclick="openLightbox(this)">
+                        <img src="${img.src}" alt="${data.title}">
+                        <span class="img-label">${img.label}</span>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    panel.innerHTML = `
+        <div class="award-info">
+            <h3>${data.title}</h3>
+            <div class="award-meta">${data.meta}</div>
+            <p class="award-desc">${data.desc}</p>
+        </div>
+        ${mediaHTML}
+    `;
 }
