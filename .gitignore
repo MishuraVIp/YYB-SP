@@ -1,0 +1,31 @@
+# Исходные тяжелые материалы клиента (все фото уже оптимизированы в img/)
+/src/
+
+# Шаблоны видео
+/templates.mp4
+
+# Кэш Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+.venv/
+venv/
+ENV/
+
+# IDE и редакторы
+.vscode/
+.idea/
+.cursor/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Локальные логи и ОС
+*.log
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Светлая память | Юрий Бесчастнов</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,700;1,700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    <div class="vignette"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="#home" class="nav-logo">Светлая память</a>
+            <div class="nav-links">
+                <a href="#home" class="nav-link">Главная</a>
+                <a href="#bio" class="nav-link">Книга Жизни</a>
+                <a href="#awards" class="nav-link">Награды</a>
+                <a href="#stories" class="nav-link">Истории</a>
+                <a href="#gallery" class="nav-link">Мгновения</a>
+                <a href="#memory" class="nav-link">Слова тепла</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="hero dark-section">
+            <div class="hero-bg"></div>
+            <div class="container relative-z">
+                <span class="section-tag fade-in">Помним. Любим. Чтим.</span>
+                <div class="hero-img-container fade-in">
+                    <img src="img/doma.jpg" alt="Портрет Юрия Бесчастнова">
+                </div>
+                <h1 class="fade-in">Юрий Бесчастнов</h1>
+                <p class="dates fade-in">01.11.1995 — 22.01.2026</p>
+                <div class="divider fade-in"></div>
+                <p class="hero-quote fade-in"><i>«Родина и семья — на первом месте»</i></p>
+            </div>
+        </section>
+
+        <!-- Biography Section (Interactive Book) -->
+        <section id="bio" class="bio-section light-section">
+            <div class="patriotic-bg patriotic-4"></div>
+            <div class="container relative-z">
+                <span class="section-tag fade-in">Наследие</span>
+                <h2 class="section-title fade-in">Страницы Жизни</h2>
+                
+                <div class="book-module fade-in">
+                    
+                    <div id="book" class="book">
+                        
+                        <!-- Paper 1 (Cover / Детство) -->
+                        <div class="paper" id="p1">
+                            <div class="front" onclick="goNextPage()">
+                                <div class="page-content cover">
+                                    <h3 class="book-title">Книга Памяти</h3>
+                                    <div class="cover-divider"></div>
+                                    <p class="book-subtitle">Юрий Юрьевич Бесчастнов</p>
+                                    <p class="instruction">Нажмите на страницу, чтобы открыть</p>
+                                </div>
+                            </div>
+                            <div class="back" onclick="goPrevPage()">
+                                <div class="page-content">
+                                    <h3>Детство и корни</h3>
+                                    <p>Юра родился 1 ноября 1995 года в деревне Шубино Ярославской области. Его семья перенесла тяжелые испытания. В 1989 году они были вынуждены спешно бежать из Узбекистана из-за Ферганских погромов и роста национализма, бросив всё имущество. Ночью его родители, Нелла Хуснулхаковна и Юрий Константинович, с двумя сыновьями уехали на товарном поезде. Семья обжилась в колхозе, где вскоре и родился Юра.</p>
+                                    <img src="img/detstvo_1.jpg" alt="Юрий в детстве" class="book-photo" onclick="openLightbox(this); event.stopPropagation();">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Paper 2 (Юность / Начало службы) -->
+                        <div class="paper" id="p2">
+                            <div class="front" onclick="goNextPage()">
+                                <div class="page-content">
+                                    <h3>Юность и характер</h3>
+                                    <p>С детства Юра рос очень крепким, ответственным и разносторонним человеком. Он увлекался спортом, особенно гиревым, и не раз занимал призовые места на соревнованиях. Помимо спорта, Юра очень любил музыку: прекрасно играл на гитаре. Друзья и близкие ценили его за честность, скромность и готовность всегда прийти на помощь.</p>
+                                    <img src="img/detstvo_2.jpg" alt="Юрий в юности" class="book-photo" onclick="openLightbox(this); event.stopPropagation();">
+                                </div>
+                            </div>
+                            <div class="back" onclick="goPrevPage()">
+                                <div class="page-content">
+                                    <h3>Начало службы</h3>
+                                    <p>В 2018 году Юрий связал свою жизнь с армией, поступив во 2-е отделение 3-го взвода 4-й роты 2-го батальона. С первых дней он проявлял высокую ответственность. В 2020 году он прошёл полугодовую командировку в Сирии, неся службу на посту и участвуя в рейдах. За выполнение боевых задач Юрий был награждён сирийской медалью.</p>
+                                    <img src="img/boevye_tovarishi_1.jpg" alt="Военная служба" class="book-photo" onclick="openLightbox(this); event.stopPropagation();">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Paper 3 (Семья / СВО) -->
+                        <div class="paper" id="p3">
+                            <div class="front" onclick="goNextPage()">
+                                <div class="page-content">
+                                    <h3>Любовь и семья</h3>
+                                    <p>20 сентября 2020 года Юрий встретил Ксению, тогда студентку педагогического вуза. Он ухаживал трепетно и красиво, окружая её заботой. 6 августа 2021 года они поженились. 29 апреля 2025 года родился их сын Артём. Счастливое отцовство, забота о малыше и планы на будущее стали лучшим периодом его жизни.</p>
+                                    <img src="img/svadba.jpg" alt="Юрий с семьей" class="book-photo" onclick="openLightbox(this); event.stopPropagation();">
+                                </div>
+                            </div>
+                            <div class="back" onclick="goPrevPage()">
+                                <div class="page-content">
+                                    <h3>Защита Родины</h3>
+                                    <p>С самого начала СВО Юрий воевал на передовой в пехоте. Он обладал нереальной храбростью. Получил три ранения: два тяжелых (в грудь и руку) и одно легкое (в поясницу). После ранения в руку перенёс тяжелые операции в госпитале им. Бурденко, лишился безымянного пальца. После лечения перевёлся в дивизию в Иваново оператором БПЛА и вернулся на фронт.</p>
+                                    <img src="img/boevye_tovarishi_2.jpg" alt="На передовой" class="book-photo" onclick="openLightbox(this); event.stopPropagation();">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Paper 4 (Подвиг / Back Cover) -->
+                        <div class="paper" id="p4">
+                            <div class="front">
+                                <div class="page-content">
+                                    <h3>Подвиг и Вечность</h3>
+                                    <p>В сентябре 2025 года контракт подписал младший брат Никита. Юрий очень сильно переживал за брата. Извещение о гибели Никиты стало тяжелейшим ударом. 22 января 2026 года Юрий ушёл на боевое задание. Его последним сообщением жене стали слова любви. В тот день он геройски погиб, оставаясь верным долгу до конца.</p>
+                                    <img src="img/s_zhenoy_2.jpg" alt="Юрий с супругой Ксенией" class="book-photo" onclick="openLightbox(this); event.stopPropagation();">
+                                </div>
+                            </div>
+                            <div class="back" onclick="goPrevPage()">
+                                <div class="page-content cover">
+                                    <div class="cover-divider"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Awards Section -->
+        <section id="awards" class="awards-section dark-section">
+            <div class="patriotic-bg patriotic-1"></div>
+            <div class="patriotic-bg patriotic-2"></div>
+            
+            <div class="container relative-z">
+                <span class="section-tag fade-in">Честь и Доблесть</span>
+                <h2 class="section-title fade-in">Военный путь и награды</h2>
+                <div class="awards-grid">
+                    <div class="award-card fade-in">
+                        <img src="img/boevye_tovarishi_1.jpg" alt="Сирийская кампания">
+                        <h3>Сирийская кампания</h3>
+                        <p>В 2020 году Юрий принимал участие в военной операции в Сирийской Арабской Республике. За успешное выполнение специальных задач был награжден Медалью участника военной операции в Сирии.</p>
+                    </div>
+                    <div class="award-card fade-in">
+                        <img src="img/boevye_tovarishi_2.jpg" alt="Доблесть и храбрость">
+                        <h3>Доблесть и храбрость</h3>
+                        <p>Юрий проявил невероятную отвагу во время СВО. Он неоднократно участвовал в сложнейших штурмовых операциях. За личное мужество награжден орденами и медалями.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stories Section -->
+        <section id="stories" class="stories-section light-section">
+            <div class="patriotic-bg patriotic-3"></div>
+            <div class="container relative-z">
+                <span class="section-tag fade-in">Память</span>
+                <h2 class="section-title fade-in">Хронология жизни и подвигов</h2>
+                <div class="story-timeline">
+                    <div class="story-item fade-in">
+                        <div class="story-date">1989 год</div>
+                        <div class="story-content">
+                            <h3>Переезд из Узбекистана</h3>
+                            <p>Семья Бесчастновых была вынуждена спешно покинуть Узбекистан из-за Ферганских погромов и роста национализма. Родители Юрия, бросив дом и работу, с двумя маленькими детьми на руках сели ночью на товарный поезд и уехали в Ярославскую область, чтобы начать жизнь с чистого листа.</p>
+                        </div>
+                    </div>
+                    <div class="story-item fade-in">
+                        <div class="story-date">2020 год</div>
+                        <div class="story-content">
+                            <h3>Служба в Сирии</h3>
+                            <p>В ходе военной службы Юрий прошёл полугодовую командировку в Сирийской Арабской Республике. Вместе с товарищами он мужественно выполнял задачи, нёс службу на постах и выезжал в рейды, за что был награждён медалью участника операции.</p>
+                        </div>
+                    </div>
+                    <div class="story-item fade-in">
+                        <div class="story-date">6 августа 2021 г.</div>
+                        <div class="story-content">
+                            <h3>Свадьба</h3>
+                            <p>Юрий женился на Ксении после красивого и заботливого ухаживания. Юра оберегал супругу от любых забот, часто повторяя, что женщины созданы для радости, а не для тяжестей.</p>
+                        </div>
+                    </div>
+                    <div class="story-item fade-in">
+                        <div class="story-date">Сентябрь 2021 г.</div>
+                        <div class="story-content">
+                            <h3>Учения в Беларуси</h3>
+                            <p>Во время прыжка с парашютом с борта самолёта Ил-76 Юрий случайно потерял часы в бескрайнем поле, выдёргивая кольцо. Чудесным образом его товарищ, приземлившийся позже, наткнулся на эти часы в густой траве.</p>
+                        </div>
+                    </div>
+                    <div class="story-item fade-in">
+                        <div class="story-date">Февраль 2023 г.</div>
+                        <div class="story-content">
+                            <h3>Дружеский оберег</h3>
+                            <p>На передовых позициях СВО товарищ подарил Юрию свою личную каску, которая до этого спасла ему жизнь при обстреле. Зная, что служба в пехоте у «Дяди Юры» намного опаснее, друг отдал шлем как символ фронтового братства.</p>
+                        </div>
+                    </div>
+                    <div class="story-item fade-in">
+                        <div class="story-date">2023 — 2024 гг.</div>
+                        <div class="story-content">
+                            <h3>Испытание ранениями</h3>
+                            <p>Юрий получил три ранения. После осколочного ранения в грудь в сентябре 2023 года он восстанавливался в Анапе. В марте 2024 года он отказался от эвакуации после ранения в поясницу. В мае 2024 года он получил тяжелейшие ранения руки, лица и головы. После года операций в госпитале им. Бурденко он лишился пальца, но твёрдо решил вернуться в строй.</p>
+                        </div>
+                    </div>
+                    <div class="story-item fade-in">
+                        <div class="story-date">29 апреля 2025 г.</div>
+                        <div class="story-content">
+                            <h3>Рождение сына Артёма</h3>
+                            <p>В семье Бесчастновых рождается сын Артём. Юрий стал счастливым отцом, заботливо ухаживал за малышом и строил большие планы на мирную жизнь в новой квартире.</p>
+                        </div>
+                    </div>
+                    <div class="story-item fade-in">
+                        <div class="story-date">22 января 2026 г.</div>
+                        <div class="story-content">
+                            <h3>Последняя боевая задача</h3>
+                            <p>Переведясь в дивизию в Иваново на БПЛА, Юрий снова отправился на фронт, переживая за своего младшего брата Никиту. Утром 22 января Юрий отправил жене прощальное сообщение со словами любви, ушёл на боевой выход и героически погиб.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="gallery-section dark-section">
+            <div class="container relative-z">
+                <span class="section-tag fade-in">Архив</span>
+                <h2 class="section-title fade-in">Мгновения и лица</h2>
+                <div class="polaroid-grid">
+                    <div class="polaroid fade-in" onclick="openLightbox(this)">
+                        <img src="img/detstvo_1.jpg" alt="Детство Юры">
+                        <p>Юра в детстве</p>
+                    </div>
+                    <div class="polaroid fade-in" onclick="openLightbox(this)">
+                        <img src="img/detstvo_2.jpg" alt="Раннее детство">
+                        <p>Раннее детство</p>
+                    </div>
+                    <div class="polaroid fade-in" onclick="openLightbox(this)">
+                        <img src="img/doma.jpg" alt="Юрий Бесчастнов дома">
+                        <p>Юрий Бесчастнов дома</p>
+                    </div>
+                    <div class="polaroid fade-in" onclick="openLightbox(this)">
+                        <img src="img/doma_s_sobachkoy.jpg" alt="Дома с питомцем">
+                        <p>Дома с любимой собакой</p>
+                    </div>
+                    <div class="polaroid fade-in" onclick="openLightbox(this)">
+                        <img src="img/v_krugu_semyi.jpg" alt="В кругу семьи">
+                        <p>В кругу семьи</p>
+                    </div>
+                    <div class="polaroid fade-in" onclick="openLightbox(this)">
+                        <img src="img/svadba.jpg" alt="Свадьба Ксении и Юрия">
+                        <p>Свадьба Ксении и Юрия, 06.08.2021</p>
+                    </div>
+                    <div class="polaroid fade-in" onclick="openLightbox(this)">
+                        <img src="img/s_zhenoy_1.jpg" alt="С женой Ксенией">
+                        <p>С женой Ксенией</p>
+                    </div>
+                    <div class="polaroid fade-in" onclick="openLightbox(this)">
+                        <img src="img/s_zhenoy_2.jpg" alt="Семейные моменты">
+                        <p>Семейные моменты</p>
+                    </div>
+                    <div class="polaroid fade-in" onclick="openLightbox(this)">
+                        <img src="img/s_zhenoy_3.jpg" alt="С любимой супругой">
+                        <p>С любимой супругой</p>
+                    </div>
+                    <div class="polaroid fade-in" onclick="openLightbox(this)">
+                        <img src="img/zhena_v_roddome.jpg" alt="Встреча жены из роддома">
+                        <p>Встреча жены из роддома</p>
+                    </div>
+                    <div class="polaroid fade-in" onclick="openLightbox(this)">
+                        <img src="img/rodilsya_syn_1.jpg" alt="Родился сын Артёмка">
+                        <p>Родился сын Артёмка</p>
+                    </div>
+                    <div class="polaroid fade-in" onclick="openLightbox(this)">
+                        <img src="img/rodilsya_syn_2.jpg" alt="Первые мгновения сына">
+                        <p>Первые мгновения сына</p>
+                    </div>
+                    <div class="polaroid fade-in" onclick="openLightbox(this)">
+                        <img src="img/boevye_tovarishi_1.jpg" alt="С боевыми товарищами">
+                        <p>С боевыми товарищами</p>
+                    </div>
+                    <div class="polaroid fade-in" onclick="openLightbox(this)">
+                        <img src="img/boevye_tovarishi_2.jpg" alt="Фронтовое братство">
+                        <p>Фронтовое братство на СВО</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Memory Page -->
+        <section id="memory" class="memory-section light-section">
+            <div class="container">
+                <h2 class="section-title fade-in">Слова тепла и памяти</h2>
+                <div class="guestbook-container">
+                    <form class="memory-form fade-in" onsubmit="submitMemory(event)">
+                        <div class="form-group">
+                            <label for="name">Ваше имя</label>
+                            <input type="text" id="name" required placeholder="Как к вам обращаться?">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Ваше воспоминание или соболезнование</label>
+                            <textarea id="message" rows="5" required placeholder="Напишите несколько добрых слов..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">Оставить слово памяти</button>
+                    </form>
+
+                    <div class="memory-list fade-in" id="memory-list">
+                        <div class="memory-card">
+                            <p class="memory-text">«Юрген обладал нереальной смелостью, терпеливостью и храбростью. Он неоднократно штурмовал опорные пункты врага, никогда не хвастался и не восхвалял себя, вел себя сдержанно и скромно. До сих пор не могу поверить, что его нет...»</p>
+                            <p class="memory-author">— Сослуживец и друг</p>
+                        </div>
+                        <div class="memory-card">
+                            <p class="memory-text">«Юра всегда красиво ухаживал: цветы, подарки, никогда не давал носить тяжелые пакеты. Он говорил, что женщины не созданы для тяжестей. Наш сын Тёмка будет расти и гордиться своим отцом-героем, который пошел защищать нашу Родину.»</p>
+                            <p class="memory-author">— Супруга Ксения</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-wrapper">
+            <img class="lightbox-content" id="lightbox-img">
+            <div id="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="site-audio">
+        <source src="audio/voiceover.wav" type="audio/wav">
+    </audio>
+
+    <!-- Audio Control Button -->
+    <button id="audio-control" class="audio-control" onclick="toggleAudio()" aria-label="Включить/Выключить озвучку" title="Озвучка сайта">
+        <svg id="audio-icon-play" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        <svg id="audio-icon-pause" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+    </button>
+
+    <!-- Scripts -->
+    <!-- Для подключения реальной базы данных комментариев (Supabase) раскомментируйте строку ниже: -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> -->
+    <script src="js/app.js"></script>
+</body>
+</html>
