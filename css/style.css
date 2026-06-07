@@ -885,34 +885,142 @@ section {
 }
 
 .toggle-comments-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed currentColor;
     color: var(--text-light-muted);
-    padding: 10px 20px;
-    border-radius: 20px;
+    padding: 4px 0;
     font-size: 0.9rem;
+    font-family: var(--font-body);
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     margin: 0 auto;
     transition: var(--transition-smooth);
 }
 
 .light-section .toggle-comments-btn {
-    background: rgba(0, 0, 0, 0.03);
-    border: 1px solid rgba(0, 0, 0, 0.08);
     color: var(--text-dark-muted);
 }
 
 .toggle-comments-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
     color: var(--text-light);
+    border-bottom-style: solid;
 }
 
 .light-section .toggle-comments-btn:hover {
-    background: rgba(0, 0, 0, 0.06);
     color: var(--text-dark);
+    border-bottom-style: solid;
+}
+
+/* --- Gallery Page Styles --- */
+.gallery-switcher {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 3rem;
+    width: 100%;
+}
+
+.switcher-label {
+    font-size: 0.9rem;
+    color: var(--text-light-muted);
+}
+
+.switcher-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-light-muted);
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-bottom: 2px solid transparent;
+    transition: var(--transition-smooth);
+    outline: none;
+}
+
+.switcher-btn:hover, .switcher-btn.active {
+    color: var(--text-light);
+    border-bottom-color: var(--text-light);
+}
+
+/* Collage View Layout */
+.polaroid-grid.view-collage {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 4rem;
+    padding: 2rem 0;
+    align-items: start;
+}
+
+/* Staggered offsets and rotations for polaroids in collage view */
+.polaroid-grid.view-collage .polaroid:nth-child(2n) {
+    transform: rotate(3deg) translateY(10px);
+}
+.polaroid-grid.view-collage .polaroid:nth-child(3n) {
+    transform: rotate(-4deg) translateY(-15px);
+}
+.polaroid-grid.view-collage .polaroid:nth-child(4n) {
+    transform: rotate(2deg) translateY(20px);
+}
+.polaroid-grid.view-collage .polaroid:nth-child(5n) {
+    transform: rotate(-2deg) translateY(-5px);
+}
+.polaroid-grid.view-collage .polaroid:hover {
+    transform: rotate(0deg) scale(1.05) translateY(-10px);
+    z-index: 10;
+}
+
+/* Lightbox Nav Buttons */
+.lightbox-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 2010;
+    transition: var(--transition-smooth);
+    user-select: none;
+    outline: none;
+}
+.lightbox-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--white);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+.lightbox-nav-btn.prev {
+    left: -80px;
+}
+.lightbox-nav-btn.next {
+    right: -80px;
+}
+
+/* responsive adjustments for navigation buttons */
+@media (max-width: 1024px) {
+    .lightbox-nav-btn.prev {
+        left: 10px;
+    }
+    .lightbox-nav-btn.next {
+        right: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .lightbox-nav-btn {
+        display: none !important; /* Hide arrows on mobile, rely on swipes */
+    }
 }
 
 .comments-pane {

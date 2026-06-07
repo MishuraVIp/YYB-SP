@@ -117,6 +117,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Загрузка воспоминаний
     loadAllComments();
 
+    // Инициализация лайтбокса (стрелки, свайпы)
+    initLightbox();
+
     // Инициализация первой награды во вкладках
     if (typeof showAward === 'function') {
         showAward(0);
@@ -136,37 +139,183 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// Lightbox State
+let lightboxItems = []; // Array of { src, caption }
+let lightboxCurrentIndex = -1;
+
 // Lightbox
 function openLightbox(element) {
-    const imgSrc = element.tagName === 'IMG' ? element.src : element.querySelector('img').src;
-    let capText = '';
+    let groupSelector = '';
+    // Группируем фотографии в зависимости от того, в каком блоке они находятся
+    if (element.closest('.polaroid-grid')) {
+        groupSelector = '.polaroid-grid .polaroid';
+    } else if (element.closest('.award-media')) {
+        groupSelector = '.award-media .award-media-item';
+    } else if (element.closest('#book')) {
+        groupSelector = '#book .book-photo';
+    }
+
+    if (groupSelector) {
+        const groupElements = Array.from(document.querySelectorAll(groupSelector));
+        lightboxItems = groupElements.map(el => {
+            const img = el.tagName === 'IMG' ? el : el.querySelector('img');
+            let caption = '';
+            if (el.tagName !== 'IMG') {
+                const p = el.querySelector('p');
+                if (p && !p.classList.contains('instruction')) {
+                    caption = p.textContent;
+                } else {
+                    const label = el.querySelector('.img-label');
+                    if (label) {
+                        const activeTab = document.querySelector('.award-tab.active .award-tab-title');
+                        const awardTitle = activeTab ? activeTab.textContent : '';
+                        caption = awardTitle ? `${awardTitle} — ${label.textContent}` : label.textContent;
+                    }
+                }
+            }
+            return { src: img.src, caption: caption };
+        });
+        
+        const currentImg = element.tagName === 'IMG' ? element : element.querySelector('img');
+        lightboxCurrentIndex = lightboxItems.findIndex(item => item.src === currentImg.src);
+        if (lightboxCurrentIndex === -1) lightboxCurrentIndex = 0;
+    } else {
+        const img = element.tagName === 'IMG' ? element : element.querySelector('img');
+        lightboxItems = [{ src: img.src, caption: '' }];
+        lightboxCurrentIndex = 0;
+    }
+
+    updateLightboxContent();
+
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox) {
+        lightbox.classList.add('active');
+    }
+}
+
+function updateLightboxContent() {
+    const item = lightboxItems[lightboxCurrentIndex];
+    if (!item) return;
+
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCap = document.getElementById('lightbox-caption');
     
-    // Check if it's a polaroid with a paragraph caption or an award with an img-label
-    if (element.tagName !== 'IMG') {
-        const p = element.querySelector('p');
-        if (p && !p.classList.contains('instruction')) {
-            capText = p.textContent;
+    if (lightboxImg) lightboxImg.src = item.src;
+    if (lightboxCap) lightboxCap.textContent = item.caption;
+
+    // Скрываем или показываем кнопки навигации
+    const prevBtn = document.getElementById('lightbox-prev');
+    const nextBtn = document.getElementById('lightbox-next');
+    if (prevBtn && nextBtn) {
+        if (lightboxItems.length <= 1) {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
         } else {
-            const label = element.querySelector('.img-label');
-            if (label) {
-                const activeTab = document.querySelector('.award-tab.active .award-tab-title');
-                const awardTitle = activeTab ? activeTab.textContent : '';
-                capText = awardTitle ? `${awardTitle} — ${label.textContent}` : label.textContent;
+            prevBtn.style.display = '';
+            nextBtn.style.display = '';
+        }
+    }
+}
+
+function lightboxNext() {
+    if (lightboxItems.length <= 1) return;
+    lightboxCurrentIndex = (lightboxCurrentIndex + 1) % lightboxItems.length;
+    updateLightboxContent();
+}
+
+// Предыдущий элемент лайтбокса
+function lightboxPrev() {
+    if (lightboxItems.length <= 1) return;
+    lightboxCurrentIndex = (lightboxCurrentIndex - 1 + lightboxItems.length) % lightboxItems.length;
+    updateLightboxContent();
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox) lightbox.classList.remove('active');
+}
+
+// Инициализация лайтбокса (стрелки управления, свайпы на телефонах)
+function initLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    if (!lightbox) return;
+
+    // Добавляем стрелки навигации, если их нет
+    if (!document.getElementById('lightbox-prev')) {
+        const prevBtn = document.createElement('button');
+        prevBtn.id = 'lightbox-prev';
+        prevBtn.className = 'lightbox-nav-btn prev';
+        prevBtn.innerHTML = '&#10094;';
+        prevBtn.onclick = (e) => { e.stopPropagation(); lightboxPrev(); };
+        lightbox.querySelector('.lightbox-wrapper').appendChild(prevBtn);
+    }
+    if (!document.getElementById('lightbox-next')) {
+        const nextBtn = document.createElement('button');
+        nextBtn.id = 'lightbox-next';
+        nextBtn.className = 'lightbox-nav-btn next';
+        nextBtn.innerHTML = '&#10095;';
+        nextBtn.onclick = (e) => { e.stopPropagation(); lightboxNext(); };
+        lightbox.querySelector('.lightbox-wrapper').appendChild(nextBtn);
+    }
+
+    // Жесты свайпа для телефонов
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    lightbox.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightbox.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        const diff = touchEndX - touchStartX;
+        if (Math.abs(diff) > 50) { // порог свайпа
+            if (diff > 0) {
+                lightboxPrev(); // свайп вправо -> предыдущая картинка
+            } else {
+                lightboxNext(); // свайп влево -> следующая картинка
             }
         }
     }
 
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxCap = document.getElementById('lightbox-caption');
-    
-    lightboxImg.src = imgSrc;
-    lightboxCap.textContent = capText;
-    lightbox.classList.add('active');
+    // Управление с клавиатуры
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'ArrowLeft') lightboxPrev();
+        if (e.key === 'ArrowRight') lightboxNext();
+        if (e.key === 'Escape') closeLightbox();
+    });
+
+    // Закрытие при клике по затемненному фону
+    lightbox.onclick = (e) => {
+        if (e.target === lightbox || e.target.classList.contains('lightbox-wrapper')) {
+            closeLightbox();
+        }
+    };
 }
 
-function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('active');
+// Переключение вида галереи (Сетка / Коллаж)
+function setGalleryView(view) {
+    const grid = document.getElementById('gallery-grid');
+    const btnGrid = document.getElementById('btn-grid');
+    const btnCollage = document.getElementById('btn-collage');
+    if (!grid) return;
+
+    if (view === 'collage') {
+        grid.classList.remove('view-grid');
+        grid.classList.add('view-collage');
+        if (btnCollage) btnCollage.classList.add('active');
+        if (btnGrid) btnGrid.classList.remove('active');
+    } else {
+        grid.classList.remove('view-collage');
+        grid.classList.add('view-grid');
+        if (btnGrid) btnGrid.classList.add('active');
+        if (btnCollage) btnCollage.classList.remove('active');
+    }
 }
 
 // Вспомогательные функции для локального хранилища (localStorage fallback) по разделам
