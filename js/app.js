@@ -7,9 +7,9 @@
 // 3. Раскомментируйте скрипт Supabase SDK внизу файла index.html
 // 4. Установите useSupabase: true и впишите ваши параметры подключения ниже:
 const MEMORY_DB_CONFIG = {
-    useSupabase: false,
-    supabaseUrl: 'https://ВАШ_ПРОЕКТ.supabase.co',
-    supabaseKey: 'ВАШ_ПУБЛИЧНЫЙ_ANON_KEY'
+    useSupabase: true,
+    supabaseUrl: 'https://gobbzehbalrsytatbkub.supabase.co',
+    supabaseKey: 'sb_publishable_gezOMVVM2-kEcE-3LLUEnA_Ljl6eA2e'
 };
 
 let supabaseClient = null;
