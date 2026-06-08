@@ -144,6 +144,7 @@ let lightboxItems = []; // Array of { src, caption }
 let lightboxCurrentIndex = -1;
 
 // Lightbox
+// Lightbox
 function openLightbox(element) {
     let groupSelector = '';
     // Группируем фотографии в зависимости от того, в каком блоке они находятся
@@ -190,18 +191,57 @@ function openLightbox(element) {
     const lightbox = document.getElementById('lightbox');
     if (lightbox) {
         lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Запрещаем прокрутку страницы под лайтбоксом
     }
 }
 
-function updateLightboxContent() {
+let isTransitioning = false;
+
+function updateLightboxContent(direction) {
     const item = lightboxItems[lightboxCurrentIndex];
     if (!item) return;
 
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxCap = document.getElementById('lightbox-caption');
     
-    if (lightboxImg) lightboxImg.src = item.src;
-    if (lightboxCap) lightboxCap.textContent = item.caption;
+    if (lightboxImg) {
+        if (direction && !isTransitioning) {
+            isTransitioning = true;
+            
+            // Анимация ухода старого слайда
+            lightboxImg.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+            lightboxImg.style.transform = direction === 'next' ? 'translateX(-40px)' : 'translateX(40px)';
+            lightboxImg.style.opacity = '0';
+            
+            setTimeout(() => {
+                lightboxImg.src = item.src;
+                if (lightboxCap) lightboxCap.textContent = item.caption;
+                
+                // Перемещение нового слайда на исходную позицию с противоположной стороны
+                lightboxImg.style.transition = 'none';
+                lightboxImg.style.transform = direction === 'next' ? 'translateX(40px)' : 'translateX(-40px)';
+                
+                // Принудительный reflow для применения стилей без анимации
+                lightboxImg.offsetHeight;
+                
+                // Анимация плавного появления нового слайда
+                lightboxImg.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease';
+                lightboxImg.style.transform = 'translateX(0)';
+                lightboxImg.style.opacity = '1';
+                
+                isTransitioning = false;
+            }, 200);
+        } else {
+            // Без анимации (при первом открытии)
+            lightboxImg.style.transition = 'none';
+            lightboxImg.style.transform = 'translateX(0)';
+            lightboxImg.style.opacity = '1';
+            lightboxImg.src = item.src;
+            if (lightboxCap) lightboxCap.textContent = item.caption;
+        }
+    } else {
+        if (lightboxCap) lightboxCap.textContent = item.caption;
+    }
 
     // Скрываем или показываем кнопки навигации
     const prevBtn = document.getElementById('lightbox-prev');
@@ -218,21 +258,24 @@ function updateLightboxContent() {
 }
 
 function lightboxNext() {
-    if (lightboxItems.length <= 1) return;
+    if (lightboxItems.length <= 1 || isTransitioning) return;
     lightboxCurrentIndex = (lightboxCurrentIndex + 1) % lightboxItems.length;
-    updateLightboxContent();
+    updateLightboxContent('next');
 }
 
 // Предыдущий элемент лайтбокса
 function lightboxPrev() {
-    if (lightboxItems.length <= 1) return;
+    if (lightboxItems.length <= 1 || isTransitioning) return;
     lightboxCurrentIndex = (lightboxCurrentIndex - 1 + lightboxItems.length) % lightboxItems.length;
-    updateLightboxContent();
+    updateLightboxContent('prev');
 }
 
 function closeLightbox() {
     const lightbox = document.getElementById('lightbox');
-    if (lightbox) lightbox.classList.remove('active');
+    if (lightbox) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = ''; // Восстанавливаем прокрутку страницы
+    }
 }
 
 // Инициализация лайтбокса (стрелки управления, свайпы на телефонах)
@@ -270,6 +313,11 @@ function initLightbox() {
         touchEndX = e.changedTouches[0].screenX;
         handleSwipe();
     }, { passive: true });
+
+    // Блокируем скролл фона при перетаскивании внутри лайтбокса
+    lightbox.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+    }, { passive: false });
 
     function handleSwipe() {
         const diff = touchEndX - touchStartX;
