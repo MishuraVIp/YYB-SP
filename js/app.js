@@ -144,7 +144,6 @@ let lightboxItems = []; // Array of { src, caption }
 let lightboxCurrentIndex = -1;
 
 // Lightbox
-// Lightbox
 function openLightbox(element) {
     let groupSelector = '';
     // Группируем фотографии в зависимости от того, в каком блоке они находятся
@@ -164,7 +163,12 @@ function openLightbox(element) {
             if (el.tagName !== 'IMG') {
                 const p = el.querySelector('p');
                 if (p && !p.classList.contains('instruction')) {
-                    caption = p.textContent;
+                    // Only keep captions inside the lightbox for awards
+                    if (groupSelector === '.award-media .award-media-item') {
+                        caption = p.textContent;
+                    } else {
+                        caption = '';
+                    }
                 } else {
                     const label = el.querySelector('.img-label');
                     if (label) {
