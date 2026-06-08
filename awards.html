@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Военный путь и награды | Юрий Бесчастнов</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,700;1,700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    <div class="vignette"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-logo">Светлая память</a>
+            <div class="nav-links">
+                <a href="index.html#home" class="nav-link">Главная</a>
+                <a href="index.html#bio" class="nav-link">Книга Жизни</a>
+                <a href="awards.html" class="nav-link active">Награды</a>
+                <a href="stories.html" class="nav-link">Истории</a>
+                <a href="gallery.html" class="nav-link nav-link-highlight">Фотоархив</a>
+                <a href="index.html#memory" class="nav-link">Слова тепла</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section id="awards" class="awards-section dark-section" style="padding-top: calc(var(--nav-height) + 60px);">
+            <div class="patriotic-bg patriotic-1"></div>
+            <div class="patriotic-bg patriotic-2"></div>
+            
+            <div class="container relative-z">
+                <span class="section-tag fade-in">Честь и Доблесть</span>
+                <h2 class="section-title fade-in">Военный путь и награды</h2>
+                
+                <div class="awards-tab-container fade-in">
+                    <!-- Список вкладок (слева на ПК, сверху на смартфонах) -->
+                    <div class="awards-tabs">
+                        <button class="award-tab active" onclick="showAward(0)">
+                            <span class="award-tab-title">Орден Мужества (I)</span>
+                            <span class="award-tab-date">30.11.2023</span>
+                        </button>
+                        <button class="award-tab" onclick="showAward(1)">
+                            <span class="award-tab-title">Орден Мужества (II, Посмертно)</span>
+                            <span class="award-tab-date">2026 г.</span>
+                        </button>
+                        <button class="award-tab" onclick="showAward(2)">
+                            <span class="award-tab-title">Медаль «За отвагу»</span>
+                            <span class="award-tab-date">30.05.2024</span>
+                        </button>
+                        <button class="award-tab" onclick="showAward(3)">
+                            <span class="award-tab-title">Медаль Суворова</span>
+                            <span class="award-tab-date">11.10.2022</span>
+                        </button>
+                        <button class="award-tab" onclick="showAward(4)">
+                            <span class="award-tab-title">Медаль «За боевые отличия»</span>
+                            <span class="award-tab-date">24.04.2018</span>
+                        </button>
+                        <button class="award-tab" onclick="showAward(5)">
+                            <span class="award-tab-title">Служба в Сирии</span>
+                            <span class="award-tab-date">2020 г.</span>
+                        </button>
+                        <button class="award-tab" onclick="showAward(6)">
+                            <span class="award-tab-title">Знак «Гвардия»</span>
+                            <span class="award-tab-date">Почетный знак</span>
+                        </button>
+                    </div>
+
+                    <!-- Панель деталей активной награды -->
+                    <div class="award-details-panel">
+                        <!-- Заполняется динамически через JS -->
+                    </div>
+                </div>
+
+                <!-- Комментарии к разделу Награды -->
+                <div class="section-comments fade-in" data-section="awards" style="margin-top: 4rem;">
+                    <button class="toggle-comments-btn" onclick="toggleSectionComments('awards')">
+                        <span>Несколько слов</span>
+                        <span class="comments-count" id="count-awards">(0)</span>
+                    </button>
+                    <div class="comments-pane" id="pane-awards" style="display: none;">
+                        <div class="section-comments-list" id="list-awards">
+                            <!-- Комментарии загружаются через JS -->
+                        </div>
+                        <form class="section-comment-form" onsubmit="submitSectionComment(event, 'awards')">
+                            <div class="form-row">
+                                <input type="text" placeholder="Ваше имя" required class="comment-name-input">
+                                <button type="submit" class="btn-comment-submit">Отправить</button>
+                            </div>
+                            <textarea placeholder="Ваши слова к этому разделу..." required rows="2" class="comment-text-input"></textarea>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-wrapper">
+            <img class="lightbox-content" id="lightbox-img">
+            <div id="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="site-audio">
+        <source src="audio/voiceover.wav" type="audio/wav">
+    </audio>
+
+    <!-- Audio Control Button -->
+    <button id="audio-control" class="audio-control" onclick="toggleAudio()" aria-label="Включить/Выключить озвучку" title="Озвучка сайта">
+        <svg id="audio-icon-play" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        <svg id="audio-icon-pause" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

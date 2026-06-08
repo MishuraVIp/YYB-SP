@@ -18,14 +18,14 @@
 
     <nav class="navbar">
         <div class="container">
-            <a href="#home" class="nav-logo">Светлая память</a>
+            <a href="index.html" class="nav-logo">Светлая память</a>
             <div class="nav-links">
-                <a href="#home" class="nav-link">Главная</a>
-                <a href="#bio" class="nav-link">Книга Жизни</a>
-                <a href="#awards" class="nav-link">Награды</a>
-                <a href="#stories" class="nav-link">Истории</a>
-                <a href="gallery.html" class="nav-link">Мгновения</a>
-                <a href="#memory" class="nav-link">Слова тепла</a>
+                <a href="index.html#home" class="nav-link">Главная</a>
+                <a href="index.html#bio" class="nav-link">Книга Жизни</a>
+                <a href="awards.html" class="nav-link">Награды</a>
+                <a href="stories.html" class="nav-link">Истории</a>
+                <a href="gallery.html" class="nav-link nav-link-highlight">Фотоархив</a>
+                <a href="index.html#memory" class="nav-link">Слова тепла</a>
             </div>
         </div>
     </nav>
@@ -134,7 +134,7 @@
                 <!-- Комментарии к разделу Книга Жизни -->
                 <div class="section-comments fade-in" data-section="bio">
                     <button class="toggle-comments-btn" onclick="toggleSectionComments('bio')">
-                        <span>💬 Воспоминания о Книге Жизни</span>
+                        <span>Несколько слов</span>
                         <span class="comments-count" id="count-bio">(0)</span>
                     </button>
                     <div class="comments-pane" id="pane-bio" style="display: none;">
@@ -153,186 +153,33 @@
             </div>
         </section>
 
-        <!-- Awards Section -->
-        <section id="awards" class="awards-section dark-section">
-            <div class="patriotic-bg patriotic-1"></div>
-            <div class="patriotic-bg patriotic-2"></div>
-            
+        <!-- Sections Navigation Menu -->
+        <section id="sections-menu" class="sections-menu-section dark-section">
             <div class="container relative-z">
-                <span class="section-tag fade-in">Честь и Доблесть</span>
-                <h2 class="section-title fade-in">Военный путь и награды</h2>
-                <div class="awards-tab-container fade-in">
-                    <!-- Список вкладок (слева на ПК, сверху на смартфонах) -->
-                    <div class="awards-tabs">
-                        <button class="award-tab active" onclick="showAward(0)">
-                            <span class="award-tab-title">Орден Мужества (I)</span>
-                            <span class="award-tab-date">30.11.2023</span>
-                        </button>
-                        <button class="award-tab" onclick="showAward(1)">
-                            <span class="award-tab-title">Орден Мужества (II, Посмертно)</span>
-                            <span class="award-tab-date">2026 г.</span>
-                        </button>
-                        <button class="award-tab" onclick="showAward(2)">
-                            <span class="award-tab-title">Медаль «За отвагу»</span>
-                            <span class="award-tab-date">30.05.2024</span>
-                        </button>
-                        <button class="award-tab" onclick="showAward(3)">
-                            <span class="award-tab-title">Медаль Суворова</span>
-                            <span class="award-tab-date">11.10.2022</span>
-                        </button>
-                        <button class="award-tab" onclick="showAward(4)">
-                            <span class="award-tab-title">Медаль «За боевые отличия»</span>
-                            <span class="award-tab-date">24.04.2018</span>
-                        </button>
-                        <button class="award-tab" onclick="showAward(5)">
-                            <span class="award-tab-title">Служба в Сирии</span>
-                            <span class="award-tab-date">2020 г.</span>
-                        </button>
-                        <button class="award-tab" onclick="showAward(6)">
-                            <span class="award-tab-title">Знак «Гвардия»</span>
-                            <span class="award-tab-date">Почетный знак</span>
-                        </button>
-                    </div>
-
-                    <!-- Панель деталей активной награды -->
-                    <div class="award-details-panel">
-                        <!-- Заполняется динамически через JS -->
-                    </div>
-                </div>
-
-                <!-- Комментарии к разделу Награды -->
-                <div class="section-comments fade-in" data-section="awards">
-                    <button class="toggle-comments-btn" onclick="toggleSectionComments('awards')">
-                        <span>💬 Отзывы о Наградах</span>
-                        <span class="comments-count" id="count-awards">(0)</span>
-                    </button>
-                    <div class="comments-pane" id="pane-awards" style="display: none;">
-                        <div class="section-comments-list" id="list-awards">
-                            <!-- Комментарии загружаются через JS -->
-                        </div>
-                        <form class="section-comment-form" onsubmit="submitSectionComment(event, 'awards')">
-                            <div class="form-row">
-                                <input type="text" placeholder="Ваше имя" required class="comment-name-input">
-                                <button type="submit" class="btn-comment-submit">Отправить</button>
-                            </div>
-                            <textarea placeholder="Ваши слова к этому разделу..." required rows="2" class="comment-text-input"></textarea>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Stories Section -->
-        <section id="stories" class="stories-section light-section">
-            <div class="patriotic-bg patriotic-3"></div>
-            <div class="container relative-z">
-                <span class="section-tag fade-in">Память</span>
-                <h2 class="section-title fade-in">Хронология жизни и подвигов</h2>
-                <div class="story-timeline">
-                    <div class="story-item fade-in">
-                        <div class="story-date">1989 год</div>
-                        <div class="story-content">
-                            <h3>Переезд из Узбекистана</h3>
-                            <p>Семья Бесчастновых была вынуждена спешно покинуть Узбекистан из-за Ферганских погромов и роста национализма. Родители Юрия, бросив дом и работу, с двумя маленькими детьми на руках сели ночью на товарный поезд и уехали в Ярославскую область, чтобы начать жизнь с чистого листа.</p>
-                        </div>
-                    </div>
-                    <div class="story-item fade-in">
-                        <div class="story-date">2002 год</div>
-                        <div class="story-content">
-                            <h3>Школьные годы</h3>
-                            <p>Юра пошёл в первый класс школы №5 г. Углича. Скромный мальчик прославился в первый же день, случайно сбежав с урока от волнения. Позже он учился в профильном МЧС-классе, занимался шахматами, футболом и борьбой, проявляя доброту и ответственность.</p>
-                        </div>
-                    </div>
-                    <div class="story-item fade-in">
-                        <div class="story-date">2014 год</div>
-                        <div class="story-content">
-                            <h3>Практика в Крыму</h3>
-                            <p>Поступив в университет г. Дубна на геофизику, Юрий поехал на практику в Крым. Это время запомнилось ему на всю жизнь — теплое море, присоединение полуострова к России и просмотр матчей чемпионата мира по футболу прямо на берегу.</p>
-                        </div>
-                    </div>
-                    <div class="story-item fade-in">
-                        <div class="story-date">2015 — 2018 гг.</div>
-                        <div class="story-content">
-                            <h3>Путь в гиревом спорте</h3>
-                            <p>Познакомившись с тренером Эриком Душановым, Юрий начал упорно заниматься гирями. За 5 лет он взял бронзу на чемпионате Московской области, почти сдал на КМС и однажды выступил до конца на соревнованиях с тяжелым вывихом плеча.</p>
-                        </div>
-                    </div>
-                    <div class="story-item fade-in">
-                        <div class="story-date">2018 год</div>
-                        <div class="story-content">
-                            <h3>Университет и ВДВ</h3>
-                            <p>Юрий окончил университет без троек, получив диплом геофизика. Понимая важность долга перед страной, он принял твердое решение служить Родине, пришел в военкомат и выбрал Воздушно-десантные войска (ВДВ).</p>
-                        </div>
-                    </div>
-                    <div class="story-item fade-in">
-                        <div class="story-date">2020 год</div>
-                        <div class="story-content">
-                            <h3>Служба в Сирии</h3>
-                            <p>В ходе военной службы Юрий прошёл полугодовую командировку в Сирийской Арабской Республике. Вместе с товарищами он мужественно выполнял задачи, нёс службу на постах и выезжал в рейды, за что был награждён медалью участника операции.</p>
-                        </div>
-                    </div>
-                    <div class="story-item fade-in">
-                        <div class="story-date">6 августа 2021 г.</div>
-                        <div class="story-content">
-                            <h3>Свадьба</h3>
-                            <p>Юрий женился на Ксении после красивого и заботливого ухаживания. Юра оберегал супругу от любых забот, часто повторяя, что женщины созданы для радости, а не для тяжестей.</p>
-                        </div>
-                    </div>
-                    <div class="story-item fade-in">
-                        <div class="story-date">Сентябрь 2021 г.</div>
-                        <div class="story-content">
-                            <h3>Учения в Беларуси</h3>
-                            <p>Во время прыжка с парашютом с борта самолёта Ил-76 Юрий случайно потерял часы в бескрайнем поле, выдёргивая кольцо. Чудесным образом его товарищ, приземлившийся позже, наткнулся на эти часы в густой траве.</p>
-                        </div>
-                    </div>
-                    <div class="story-item fade-in">
-                        <div class="story-date">Февраль 2023 г.</div>
-                        <div class="story-content">
-                            <h3>Дружеский оберег</h3>
-                            <p>На передовых позициях СВО товарищ подарил Юрию свою личную каску, которая до этого спасла ему жизнь при обстреле. Зная, что служба в пехоте у «Дяди Юры» намного опаснее, друг отдал шлем как символ фронтового братства.</p>
-                        </div>
-                    </div>
-                    <div class="story-item fade-in">
-                        <div class="story-date">2023 — 2024 гг.</div>
-                        <div class="story-content">
-                            <h3>Испытание ранениями</h3>
-                            <p>Юрий получил три ранения. После осколочного ранения в грудь в сентябре 2023 года он восстанавливался в Анапе. В марте 2024 года он отказался от эвакуации после ранения в поясницу. В мае 2024 года он получил тяжелейшие ранения руки, лица и головы. После года операций в госпитале им. Бурденко он лишился пальца, но твёрдо решил вернуться в строй.</p>
-                        </div>
-                    </div>
-                    <div class="story-item fade-in">
-                        <div class="story-date">29 апреля 2025 г.</div>
-                        <div class="story-content">
-                            <h3>Рождение сына Артёма</h3>
-                            <p>В семье Бесчастновых рождается сын Артём. Юрий стал счастливым отцом, заботливо ухаживал за малышом и строил большие планы на мирную жизнь в новой квартире.</p>
-                        </div>
-                    </div>
-                    <div class="story-item fade-in">
-                        <div class="story-date">22 января 2026 г.</div>
-                        <div class="story-content">
-                            <h3>Последняя боевая задача</h3>
-                            <p>Переведясь в дивизию в Иваново на БПЛА, Юрий снова отправился на фронт, переживая за своего старшего брата Никиту. Утром 22 января Юрий отправил жене прощальное сообщение со словами любви, ушёл на боевой выход и героически погиб.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Комментарии к разделу Хронология -->
-                <div class="section-comments fade-in" data-section="stories">
-                    <button class="toggle-comments-btn" onclick="toggleSectionComments('stories')">
-                        <span>💬 Воспоминания о Хронологии событий</span>
-                        <span class="comments-count" id="count-stories">(0)</span>
-                    </button>
-                    <div class="comments-pane" id="pane-stories" style="display: none;">
-                        <div class="section-comments-list" id="list-stories">
-                            <!-- Комментарии загружаются через JS -->
-                        </div>
-                        <form class="section-comment-form" onsubmit="submitSectionComment(event, 'stories')">
-                            <div class="form-row">
-                                <input type="text" placeholder="Ваше имя" required class="comment-name-input">
-                                <button type="submit" class="btn-comment-submit">Отправить</button>
-                            </div>
-                            <textarea placeholder="Ваши слова к этому разделу..." required rows="2" class="comment-text-input"></textarea>
-                        </form>
-                    </div>
+                <span class="section-tag fade-in">Разделы Памяти</span>
+                <h2 class="section-title fade-in">Узнать больше</h2>
+                
+                <div class="sections-grid fade-in">
+                    <a href="awards.html" class="section-card">
+                        <div class="card-icon">🎖️</div>
+                        <h3>Военные награды</h3>
+                        <p>Ордена и медали за отвагу, личное мужество и героизм, проявленные при защите Отечества.</p>
+                        <span class="card-link-text">Открыть &rarr;</span>
+                    </a>
+                    
+                    <a href="stories.html" class="section-card">
+                        <div class="card-icon">📜</div>
+                        <h3>Хронология жизни</h3>
+                        <p>Подробный путь: от мирного детства и университетских лет до службы в ВДВ и фронтового подвига.</p>
+                        <span class="card-link-text">Открыть &rarr;</span>
+                    </a>
+                    
+                    <a href="gallery.html" class="section-card">
+                        <div class="card-icon">📸</div>
+                        <h3>Фотоархив</h3>
+                        <p>Архив мгновений, запечатлевших Юрия в кругу семьи, с друзьями и сослуживцами.</p>
+                        <span class="card-link-text">Открыть &rarr;</span>
+                    </a>
                 </div>
             </div>
         </section>
